@@ -7,7 +7,6 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"fmt"
 	"os"
 	"time"
 
@@ -15,10 +14,9 @@ import (
 )
 
 func WriteKeyCertFile(Key []byte, Cert []byte, filePath string) error {
-	keyFilePath := fmt.Sprintf("%s%s", filePath, ".pem")
-	CertKey := append(Cert, Key)
+	CertKey := append(Cert, Key...)
 
-	if err := os.WriteFile(keyFilePath, CertKey, 0600); err != nil {
+	if err := os.WriteFile(filePath, CertKey, 0600); err != nil {
 		return err
 	}
 	return nil
