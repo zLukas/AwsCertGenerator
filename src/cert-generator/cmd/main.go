@@ -77,6 +77,6 @@ func main() {
 	caKey, caCert, err = tls.CreateCACert(&ca)
 	Key, Cert, err = tls.CreateCert(&ce)
 
-
-
+	tls.WriteCertFiles(caKey, caCert)
+	tls.WriteCertFiles(caKey, Cert)
 }
