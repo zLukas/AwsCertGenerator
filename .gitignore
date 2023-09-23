@@ -165,3 +165,8 @@ cython_debug/
 *.cert 
 *.pem
 *.key
+
+
+#terrafrom
+*.tfvars
+.terraform*
