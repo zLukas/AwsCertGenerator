@@ -1,0 +1,15 @@
+name: go unit tests
+
+on:
+  push:
+    paths: 
+      - '**.go'
+  pull_request:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build src binaries
+        run: go build cmd/tls.go 
