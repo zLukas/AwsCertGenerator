@@ -1,6 +1,11 @@
 package tls
 
-import "math/big"
+import (
+	"crypto/x509"
+	"encoding/pem"
+	"io"
+	"math/big"
+)
 
 type CACert struct {
 	Serial        *big.Int    `yaml:"serial"`
@@ -23,4 +28,18 @@ type CertSubject struct {
 	PostalCode         string `yaml:"postalCode"`
 	SerialNumber       string `yaml:"serialNumber"`
 	CommonName         string `yaml:"commonName"`
+}
+
+type Block struct {
+	Bytes []byte
+}
+
+type IPem interface {
+	Decode(data []byte) (*Block, []byte)
+	Encode(out io.Writer, b *pem.Block) error
+}
+
+type Ix509 interface {
+	ParseCertificate(der []byte) (*x509.Certificate, error)
+	CreateCertificate(rand io.Reader, template *x509.Certificate, parent *x509.Certificate, pub any, priv any) ([]byte, error)
 }

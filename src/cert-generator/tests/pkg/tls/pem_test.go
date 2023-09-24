@@ -1,27 +1,30 @@
-package test
+package tests
 
 import (
 	"testing"
+
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/tls"
 )
 
-type mockPemOK struct {}
-type mockPemFail struct {}
+func TestPemToX509_ok(t *testing.T) {
+	pemMock := mockPemOK{}
+	x509Mock := mockX509OK{}
+	var false_bytes = []byte{0xAA, 0xC5, 0xAB}
+	results, err := tls.PemToX509(false_bytes, &pemMock, &x509Mock)
+	if err != nil {
+		t.Errorf("err expected to be nil, got %s ", err)
+	}
+	if results == nil {
+		t.Errorf("results var execept to be %v, got nil ", tls.Block{Bytes: false_bytes})
+	}
 
-func (m *mockPemOK) Decode(input []byte) (*tls.Block, []byte){
-	b := tls.Block{Bytes: []byte{0xAA, 0xC5, 0xAB}}
-	return &b, nil
 }
-
-func (m *mockPemFail) Decode(input []byte) (*tls.Block, []byte){
-	return nil, nil
-}
-
 
 func TestPemToX509_fail(t *testing.T) {
-	var pemMock = mockPemOK{}
+	pemMock := mockPemFail{}
+	x509Mock := mockX509Fail{}
 	var false_bytes = []byte{0xAA, 0xC5, 0xAB}
-	results, err := tls.PemToX509(false_bytes, &pemMock)
+	results, err := tls.PemToX509(false_bytes, &pemMock, &x509Mock)
 	if results != nil {
 		t.Errorf("results var execept to be nil, got %v ", results)
 	}
