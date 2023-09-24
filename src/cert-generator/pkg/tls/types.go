@@ -30,12 +30,8 @@ type CertSubject struct {
 	CommonName         string `yaml:"commonName"`
 }
 
-type Block struct {
-	Bytes []byte
-}
-
 type IPem interface {
-	Decode(data []byte) (*Block, []byte)
+	Decode(data []byte) (*pem.Block, []byte)
 	Encode(out io.Writer, b *pem.Block) error
 }
 

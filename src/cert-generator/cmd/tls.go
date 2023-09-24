@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	ca := tls.CACert{
+	generator := Generator{}
+	caTemplate := tls.CACert{
 		Serial:        big.NewInt(1),
 		ValidForYears: 1,
 		Subject: tls.CertSubject{
@@ -20,7 +21,7 @@ func main() {
 		},
 	}
 
-	ce := tls.Cert{
+	ceTemplate := tls.Cert{
 		Serial:        big.NewInt(1),
 		ValidForYears: 1,
 		DNSNames:      []string{"yellowhost.jp2"},
@@ -32,15 +33,32 @@ func main() {
 			CommonName:         "yellowhost.jp2",
 		},
 	}
-	caKey, caCert, err := tls.CreateCACert(&ca)
-	if err != nil {
-		fmt.Printf("Error: %s", err)
-	}
-	tls.WriteKeyCertFile(caKey, caCert, "CACert.pem")
 
-	Key, Cert, err := tls.CreateCert(&ce, caKey, caCert)
+	caKey, ca, err := tls.CreateCACert(&caTemplate, &generator, &generator)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}
-	tls.WriteKeyCertFile(Key, Cert, "Cert.pem")
+
+	ceKey, ce, err := tls.CreateCert(&ceTemplate, caKey, ca, &generator, &generator)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+	}
+
+	out := Output{}
+	yaml_cert, err := out.format(Cert{
+		Name:        "CA",
+		Generated:   "today",
+		Certificate: string(ca[:]),
+		Key:         string(caKey[:]),
+	}, Cert{
+		Name:        "CE",
+		Generated:   "today",
+		Certificate: string(ce[:]),
+		Key:         string(ceKey[:]),
+	},
+	)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+	}
+	fmt.Println(string(yaml_cert[:]))
 }
