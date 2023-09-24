@@ -7,9 +7,15 @@ on:
   pull_request:
 
 
+env:
+  GO_MOD_DIR: ${{ github.workspace }}/cert-generator/
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: build src binaries
-        run: go build cmd/tls.go 
+        run: | 
+          cd ${{ env.GO_MOD_DIR }}
+          go build cmd/tls.go 
