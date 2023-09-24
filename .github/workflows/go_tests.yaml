@@ -8,7 +8,7 @@ on:
 
 
 env:
-  GO_MOD_DIR: ${{ github.workspace }}/cert-generator/
+  GO_MOD_DIR: ${{ github.workspace }}/src/cert-generator
 
 
 jobs:
