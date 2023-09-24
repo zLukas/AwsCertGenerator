@@ -51,7 +51,7 @@ func CreateCACert(ca *CACert) ([]byte, []byte, error) {
 	return keyBytes, certBytes, nil
 }
 
-func CreateCert(cert *Cert, caKey []byte, caCert []byte) ([]byte, []byte, error) {
+func CreateCert(cert *Cert, caKey []byte, caCert []byte, p IPem) ([]byte, []byte, error) {
 	template := &x509.Certificate{
 		SerialNumber: cert.Serial,
 		Subject: pkix.Name{
@@ -75,7 +75,7 @@ func CreateCert(cert *Cert, caKey []byte, caCert []byte) ([]byte, []byte, error)
 	if err != nil {
 		return nil, nil, err
 	}
-	caCertParsed, err := PemToX509(caCert)
+	caCertParsed, err := PemToX509(caCert, p)
 	if err != nil {
 		return nil, nil, err
 	}
