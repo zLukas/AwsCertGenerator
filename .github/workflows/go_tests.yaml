@@ -12,6 +12,12 @@ env:
 
 
 jobs:
+  fetch:
+    runs-on: [self-hosted , build]
+    steps: 
+      - name: checkout repo
+        uses: actions/checkout@v4
+
   build:
     runs-on: [self-hosted , build]
     steps:
