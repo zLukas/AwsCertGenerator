@@ -22,17 +22,17 @@ func WriteKeyCertFile(Key []byte, Cert []byte, filePath string) error {
 	return nil
 }
 
-func CreateCACert(ca *CACert, p IPem, x Ix509) ([]byte, []byte, error) {
+func CreateCACertBytes(ca *CACert, p IPem, x Ix509) ([]byte, []byte, error) {
 	template := &x509.Certificate{
 		SerialNumber: ca.Serial,
 		Subject: pkix.Name{
-			Country:            removeEmptyString([]string{ca.Subject.Country}),
-			Organization:       removeEmptyString([]string{ca.Subject.Organization}),
-			OrganizationalUnit: removeEmptyString([]string{ca.Subject.OrganizationalUnit}),
-			Locality:           removeEmptyString([]string{ca.Subject.Locality}),
-			Province:           removeEmptyString([]string{ca.Subject.Province}),
-			StreetAddress:      removeEmptyString([]string{ca.Subject.StreetAddress}),
-			PostalCode:         removeEmptyString([]string{ca.Subject.PostalCode}),
+			Country:            RemoveEmptyString([]string{ca.Subject.Country}),
+			Organization:       RemoveEmptyString([]string{ca.Subject.Organization}),
+			OrganizationalUnit: RemoveEmptyString([]string{ca.Subject.OrganizationalUnit}),
+			Locality:           RemoveEmptyString([]string{ca.Subject.Locality}),
+			Province:           RemoveEmptyString([]string{ca.Subject.Province}),
+			StreetAddress:      RemoveEmptyString([]string{ca.Subject.StreetAddress}),
+			PostalCode:         RemoveEmptyString([]string{ca.Subject.PostalCode}),
 			CommonName:         ca.Subject.CommonName,
 		},
 		NotBefore:             time.Now(),
@@ -51,24 +51,24 @@ func CreateCACert(ca *CACert, p IPem, x Ix509) ([]byte, []byte, error) {
 	return keyBytes, certBytes, nil
 }
 
-func CreateCert(cert *Cert, caKey []byte, caCert []byte, p IPem, x Ix509) ([]byte, []byte, error) {
+func CreateCertBytes(cert *Cert, caKey []byte, caCert []byte, p IPem, x Ix509) ([]byte, []byte, error) {
 	template := &x509.Certificate{
 		SerialNumber: cert.Serial,
 		Subject: pkix.Name{
-			Country:            removeEmptyString([]string{cert.Subject.Country}),
-			Organization:       removeEmptyString([]string{cert.Subject.Organization}),
-			OrganizationalUnit: removeEmptyString([]string{cert.Subject.OrganizationalUnit}),
-			Locality:           removeEmptyString([]string{cert.Subject.Locality}),
-			Province:           removeEmptyString([]string{cert.Subject.Province}),
-			StreetAddress:      removeEmptyString([]string{cert.Subject.StreetAddress}),
-			PostalCode:         removeEmptyString([]string{cert.Subject.PostalCode}),
+			Country:            RemoveEmptyString([]string{cert.Subject.Country}),
+			Organization:       RemoveEmptyString([]string{cert.Subject.Organization}),
+			OrganizationalUnit: RemoveEmptyString([]string{cert.Subject.OrganizationalUnit}),
+			Locality:           RemoveEmptyString([]string{cert.Subject.Locality}),
+			Province:           RemoveEmptyString([]string{cert.Subject.Province}),
+			StreetAddress:      RemoveEmptyString([]string{cert.Subject.StreetAddress}),
+			PostalCode:         RemoveEmptyString([]string{cert.Subject.PostalCode}),
 			CommonName:         cert.Subject.CommonName,
 		},
 		NotBefore:   time.Now(),
 		NotAfter:    time.Now().AddDate(cert.ValidForYears, 0, 0),
 		ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
 		KeyUsage:    x509.KeyUsageDigitalSignature,
-		DNSNames:    removeEmptyString(cert.DNSNames),
+		DNSNames:    RemoveEmptyString(cert.DNSNames),
 	}
 
 	caKeyParsed, err := key.PrivateKeyPemToRSA(caKey)
@@ -120,7 +120,7 @@ func createCert(template *x509.Certificate, caKey *rsa.PrivateKey, caCert *x509.
 	return keyOut.Bytes(), certOut.Bytes(), nil
 }
 
-func removeEmptyString(input []string) []string {
+func RemoveEmptyString(input []string) []string {
 	if len(input) == 1 && input[0] == "" {
 		return []string{}
 	}

@@ -34,12 +34,12 @@ func main() {
 		},
 	}
 
-	caKey, ca, err := tls.CreateCACert(&caTemplate, &generator, &generator)
+	caKey, ca, err := tls.CreateCACertBytes(&caTemplate, &generator, &generator)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}
 
-	ceKey, ce, err := tls.CreateCert(&ceTemplate, caKey, ca, &generator, &generator)
+	ceKey, ce, err := tls.CreateCertBytes(&ceTemplate, caKey, ca, &generator, &generator)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}

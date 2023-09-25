@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"encoding/pem"
 	"testing"
 
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/tls"
@@ -15,7 +16,7 @@ func TestPemToX509_ok(t *testing.T) {
 		t.Errorf("err expected to be nil, got %s ", err)
 	}
 	if results == nil {
-		t.Errorf("results var execept to be %v, got nil ", tls.Block{Bytes: false_bytes})
+		t.Errorf("results var execept to be %v, got nil ", pem.Block{Bytes: false_bytes})
 	}
 
 }
