@@ -1,9 +1,6 @@
 package tls
 
 import (
-	"crypto/x509"
-	"encoding/pem"
-	"io"
 	"math/big"
 )
 
@@ -28,14 +25,4 @@ type CertSubject struct {
 	PostalCode         string `yaml:"postalCode"`
 	SerialNumber       string `yaml:"serialNumber"`
 	CommonName         string `yaml:"commonName"`
-}
-
-type IPem interface {
-	Decode(data []byte) (*pem.Block, []byte)
-	Encode(out io.Writer, b *pem.Block) error
-}
-
-type Ix509 interface {
-	ParseCertificate(der []byte) (*x509.Certificate, error)
-	CreateCertificate(rand io.Reader, template *x509.Certificate, parent *x509.Certificate, pub any, priv any) ([]byte, error)
 }

@@ -22,7 +22,7 @@ func WriteKeyCertFile(Key []byte, Cert []byte, filePath string) error {
 	return nil
 }
 
-func CreateCACertBytes(ca *CACert, p IPem, x Ix509) ([]byte, []byte, error) {
+func CreateCACertBytes(ca *CACert) ([]byte, []byte, error) {
 	template := &x509.Certificate{
 		SerialNumber: ca.Serial,
 		Subject: pkix.Name{
@@ -43,7 +43,7 @@ func CreateCACertBytes(ca *CACert, p IPem, x Ix509) ([]byte, []byte, error) {
 		BasicConstraintsValid: true,
 	}
 
-	keyBytes, certBytes, err := createCert(template, nil, nil, p, x)
+	keyBytes, certBytes, err := createCert(template, nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -51,7 +51,7 @@ func CreateCACertBytes(ca *CACert, p IPem, x Ix509) ([]byte, []byte, error) {
 	return keyBytes, certBytes, nil
 }
 
-func CreateCertBytes(cert *Cert, caKey []byte, caCert []byte, p IPem, x Ix509) ([]byte, []byte, error) {
+func CreateCertBytes(cert *Cert, caKey []byte, caCert []byte) ([]byte, []byte, error) {
 	template := &x509.Certificate{
 		SerialNumber: cert.Serial,
 		Subject: pkix.Name{
@@ -75,19 +75,19 @@ func CreateCertBytes(cert *Cert, caKey []byte, caCert []byte, p IPem, x Ix509) (
 	if err != nil {
 		return nil, nil, err
 	}
-	caCertParsed, err := PemToX509(caCert, p, x)
+	caCertParsed, err := PemToX509(caCert)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	keyBytes, certBytes, err := createCert(template, caKeyParsed, caCertParsed, p, x)
+	keyBytes, certBytes, err := createCert(template, caKeyParsed, caCertParsed)
 	if err != nil {
 		return nil, nil, err
 	}
 	return keyBytes, certBytes, nil
 }
 
-func createCert(template *x509.Certificate, caKey *rsa.PrivateKey, caCert *x509.Certificate, p IPem, x Ix509) ([]byte, []byte, error) {
+func createCert(template *x509.Certificate, caKey *rsa.PrivateKey, caCert *x509.Certificate) ([]byte, []byte, error) {
 	var (
 		derBytes []byte
 		certOut  bytes.Buffer
@@ -99,21 +99,21 @@ func createCert(template *x509.Certificate, caKey *rsa.PrivateKey, caCert *x509.
 		return nil, nil, err
 	}
 	if template.IsCA {
-		derBytes, err = x.CreateCertificate(rand.Reader, template, template, &privateKey.PublicKey, privateKey)
+		derBytes, err = x509.CreateCertificate(rand.Reader, template, template, &privateKey.PublicKey, privateKey)
 		if err != nil {
 			return nil, nil, err
 		}
 	} else {
-		derBytes, err = x.CreateCertificate(rand.Reader, template, caCert, &privateKey.PublicKey, caKey)
+		derBytes, err = x509.CreateCertificate(rand.Reader, template, caCert, &privateKey.PublicKey, caKey)
 		if err != nil {
 			return nil, nil, err
 		}
 	}
 
-	if err = p.Encode(&certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
+	if err = pem.Encode(&certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
 		return nil, nil, err
 	}
-	if err = p.Encode(&keyOut, key.RSAPrivateKeyToPEM(privateKey)); err != nil {
+	if err = pem.Encode(&keyOut, key.RSAPrivateKeyToPEM(privateKey)); err != nil {
 		return nil, nil, err
 	}
 
