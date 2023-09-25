@@ -1,0 +1,27 @@
+name: go unit tests
+
+on:
+  push:
+    paths: 
+      - '**.go'
+  pull_request:
+
+
+env:
+  GO_MOD_DIR: ${{ github.workspace }}/src/cert-generator
+
+
+jobs:
+  fetch:
+    runs-on: [self-hosted , build]
+    steps: 
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+  build:
+    runs-on: [self-hosted , build]
+    steps:
+      - name: build src binaries
+        run: | 
+          cd ${{ env.GO_MOD_DIR }}
+          go build cmd/tls.go 
