@@ -25,6 +25,7 @@ jobs:
       - name: build src binaries
         run: | 
           cd ${{ env.GO_MOD_DIR }}
+          ${{ env.GO }} build cmd/*.go
 
   unit-tests:
       needs: fetch
