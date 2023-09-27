@@ -24,6 +24,7 @@ jobs:
       - name: build src binaries
         run: | 
           cd ${{ env.GO_MOD_DIR }}
+          export PATH=$PATH:/usr/local/go/bin
           go build cmd/tls.go
 
   unit-tests:
