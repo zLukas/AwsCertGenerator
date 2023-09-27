@@ -8,6 +8,7 @@ on:
 env:
   GO_MOD_DIR: ${{ github.workspace }}/src/cert-generator
   GO_TEST_DIR: ${{ github.workspace }}/src/cert-generator/tests/pkg
+  GO: /usr/local/go/bin/go
 
 
 jobs:
@@ -24,8 +25,7 @@ jobs:
       - name: build src binaries
         run: | 
           cd ${{ env.GO_MOD_DIR }}
-          export PATH=$PATH:/usr/local/go/bin
-          go build cmd/tls.go
+          ${{ env.GO }} build cmd/tls.go
 
   unit-tests:
       needs: fetch
@@ -34,5 +34,4 @@ jobs:
         - name: run unit tests
           run: | 
             cd ${{ env.GO_TEST_DIR }}
-            export PATH=$PATH:/usr/local/go/bin
-            go test ./*
+            ${{ env.GO }} test ./*
