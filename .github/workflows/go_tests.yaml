@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
   build:
+    needs: fetch
     runs-on: [self-hosted , build]
     steps:
       - name: build src binaries
@@ -26,9 +27,11 @@ jobs:
           go build cmd/tls.go
 
   unit-tests:
+      needs: fetch
       runs-on: [self-hosted , build]
       steps:
         - name: run unit tests
           run: | 
             cd ${{ env.GO_TEST_DIR }}
+            export PATH=$PATH:/usr/local/go/bin
             go test ./*
