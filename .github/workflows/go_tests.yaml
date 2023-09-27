@@ -2,13 +2,13 @@ name: go unit tests
 
 on:
   push:
-    paths: 
-      - '**.go'
   pull_request:
 
 
 env:
   GO_MOD_DIR: ${{ github.workspace }}/src/cert-generator
+  GO_TEST_DIR: ${{ github.workspace }}/src/cert-generator/tests/pkg
+  GO: /usr/local/go/bin/go
 
 
 jobs:
@@ -25,5 +25,14 @@ jobs:
       - name: build src binaries
         run: | 
           cd ${{ env.GO_MOD_DIR }}
-          export PATH=$PATH:/usr/local/go/bin
-          go build cmd/tls.go 
+          ${{ env.GO }} build cmd/*.go
+
+  unit-tests:
+      needs: fetch
+      runs-on: [self-hosted , build]
+      steps:
+        - name: run unit tests
+          run: | 
+            cd ${{ env.GO_TEST_DIR }}
+            ${{ env.GO }} test ./*
+
