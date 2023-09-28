@@ -99,21 +99,21 @@ func createCert(template *x509.Certificate, caKey *rsa.PrivateKey, caCert *x509.
 		return nil, nil, err
 	}
 	if template.IsCA {
-		derBytes, err = x509.CreateCertificate(rand.Reader, template, template, &privateKey.PublicKey, privateKey)
+		derBytes, err = Ix509.CreateCertificate(rand.Reader, template, template, &privateKey.PublicKey, privateKey)
 		if err != nil {
 			return nil, nil, err
 		}
 	} else {
-		derBytes, err = x509.CreateCertificate(rand.Reader, template, caCert, &privateKey.PublicKey, caKey)
+		derBytes, err = Ix509.CreateCertificate(rand.Reader, template, caCert, &privateKey.PublicKey, caKey)
 		if err != nil {
 			return nil, nil, err
 		}
 	}
 
-	if err = pem.Encode(&certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
+	if err = Ipem.Encode(&certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
 		return nil, nil, err
 	}
-	if err = pem.Encode(&keyOut, key.RSAPrivateKeyToPEM(privateKey)); err != nil {
+	if err = Ipem.Encode(&keyOut, key.RSAPrivateKeyToPEM(privateKey)); err != nil {
 		return nil, nil, err
 	}
 
