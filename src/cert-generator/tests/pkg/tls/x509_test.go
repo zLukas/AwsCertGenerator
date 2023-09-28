@@ -1,10 +1,41 @@
 package tests
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/tls"
 )
+
+var (
+	testPem pemMock = pemMock{
+		encodePass: true,
+		decodePass: true,
+	}
+	testRsa rsaMock = rsaMock{
+		generateKeyPass: true,
+	}
+
+	testX509 x509Mock = x509Mock{
+		createcertificatesPass: true,
+		parseCertificatePass:   true,
+	}
+)
+
+func TestSetup(t *testing.T) {
+	tls.Ix509 = &testX509
+	tls.Ipem = &testPem
+	tls.Irsa = &testRsa
+}
+
+func TearDown() {
+	testPem.decodePass = true
+	testPem.encodePass = true
+	testRsa.generateKeyPass = true
+	testRsa.generateKeyPass = true
+	testX509.createcertificatesPass = true
+	testX509.parseCertificatePass = true
+}
 
 func TestRemoveEmptyStringEmptyString(t *testing.T) {
 	empty_string := []string{""}
@@ -21,5 +52,29 @@ func TestRemoveEmptyStringNotEmptyString(t *testing.T) {
 
 	if len(result) != 3 {
 		t.Errorf("string array should have 3 lenght, go %v", len(result))
+	}
+}
+
+func TestPemToX509DecodeFail(t *testing.T) {
+	defer TearDown()
+	testPem.decodePass = false
+
+	cert, err := tls.PemToX509(nil)
+	if cert != nil {
+		t.Errorf("cert should be nil, got %v", cert)
+	}
+	if err.Error() != "failed to parse certificate PEM" {
+		t.Errorf(" error message should be \"failed to parse certificate PEM\", got %v", err)
+	}
+
+}
+func TestPemToX509DecodePass(t *testing.T) {
+	defer TearDown()
+	cert, err := tls.PemToX509(nil)
+	if reflect.TypeOf(cert).String() == string("*x509.Certificate") {
+		t.Errorf("cert should be type *x509.Certificate, got %T", cert)
+	}
+	if err != nil {
+		t.Errorf(" error should be nil, got %v", err)
 	}
 }
