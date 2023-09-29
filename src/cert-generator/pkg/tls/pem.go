@@ -2,14 +2,13 @@ package tls
 
 import (
 	"crypto/x509"
-	"encoding/pem"
 	"fmt"
 )
 
 func PemToX509(input []byte) (*x509.Certificate, error) {
-	block, _ := pem.Decode(input)
+	block, _ := Ipem.Decode(input)
 	if block == nil {
 		return nil, fmt.Errorf("failed to parse certificate PEM")
 	}
-	return x509.ParseCertificate(block.Bytes)
+	return Ix509.ParseCertificate(block.Bytes)
 }

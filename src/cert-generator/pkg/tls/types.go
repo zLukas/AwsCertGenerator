@@ -2,6 +2,8 @@ package tls
 
 import (
 	"math/big"
+
+	"github.com/zLukas/CloudTools/src/cert-generator/pkg/interfaces"
 )
 
 type CACert struct {
@@ -26,3 +28,7 @@ type CertSubject struct {
 	SerialNumber       string `yaml:"serialNumber"`
 	CommonName         string `yaml:"commonName"`
 }
+
+var Irsa interfaces.Irsa = &interfaces.Rsa{}
+var Ipem interfaces.Ipem = &interfaces.Pem{}
+var Ix509 interfaces.Ix509 = &interfaces.X509{}

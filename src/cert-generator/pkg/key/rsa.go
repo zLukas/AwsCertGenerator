@@ -7,10 +7,16 @@ import (
 	"encoding/pem"
 	"fmt"
 	"os"
+
+	"github.com/zLukas/CloudTools/src/cert-generator/pkg/interfaces"
 )
 
+var Irsa interfaces.Irsa = &interfaces.Rsa{}
+var Ipem interfaces.Ipem = &interfaces.Pem{}
+var Ix509 interfaces.Ix509 = &interfaces.X509{}
+
 func CreateRSAPrivateKey(n int) (*rsa.PrivateKey, error) {
-	return rsa.GenerateKey(rand.Reader, n)
+	return Irsa.GenerateKey(rand.Reader, n)
 }
 
 func RSAPrivateKeyToPEM(privateKey *rsa.PrivateKey) *pem.Block {
@@ -29,7 +35,7 @@ func CreateRSAPrivateKeyAndSave(path string, n int) error {
 	if err != nil {
 		return err
 	}
-	if err := pem.Encode(f, RSAPrivateKeyToPEM(privateKey)); err != nil {
+	if err := Ipem.Encode(f, RSAPrivateKeyToPEM(privateKey)); err != nil {
 		return err
 	}
 	if err := f.Close(); err != nil {
@@ -42,7 +48,7 @@ func PrivateKeyPemToRSA(input []byte) (*rsa.PrivateKey, error) {
 	var parsedKey *rsa.PrivateKey
 	var err error
 
-	privPem, _ := pem.Decode(input)
+	privPem, _ := Ipem.Decode(input)
 
 	if privPem.Type != "RSA PRIVATE KEY" {
 		return nil, fmt.Errorf("RSA private key is of the wrong type: %s", privPem.Type)
