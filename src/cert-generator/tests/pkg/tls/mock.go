@@ -45,9 +45,12 @@ func (i *pemMock) Encode(out io.Writer, b *pem.Block) error {
 }
 
 func (i *pemMock) Decode(data []byte) (*pem.Block, []byte) {
-	if i.decodePass {
+	fmt.Print(("Entering decode mock"))
+	if i.decodePass == true {
+		fmt.Print("returning pass")
 		return &pem.Block{Type: "test", Bytes: []byte{0xDE, 0xAD, 0xBE, 0xEF}}, nil
 	} else {
+		fmt.Print("returning fail")
 		return nil, nil
 	}
 }
