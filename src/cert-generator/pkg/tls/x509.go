@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
+	"fmt"
 	"os"
 	"time"
 
@@ -23,6 +24,15 @@ func WriteKeyCertFile(Key []byte, Cert []byte, filePath string) error {
 }
 
 func CreateCACertBytes(ca *CACert) ([]byte, []byte, error) {
+
+	if ca == nil {
+		return nil, nil, fmt.Errorf("template is nil")
+	}
+
+	if ca.Subject.CommonName == "" {
+		return nil, nil, fmt.Errorf("template must contain CommonName Field")
+	}
+
 	template := &x509.Certificate{
 		SerialNumber: ca.Serial,
 		Subject: pkix.Name{
