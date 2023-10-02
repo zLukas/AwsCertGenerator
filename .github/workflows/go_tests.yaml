@@ -1,7 +1,6 @@
 name: go unit tests
 
 on:
-  push:
   pull_request:
 
 
