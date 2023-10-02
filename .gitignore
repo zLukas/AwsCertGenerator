@@ -170,3 +170,4 @@ cython_debug/
 #terrafrom
 *.tfvars
 .terraform*
+*.tfstate*
