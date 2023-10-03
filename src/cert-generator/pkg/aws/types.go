@@ -17,6 +17,5 @@ type TableRecord struct {
 }
 
 type dBClient interface {
-	Must(sess *session.Session, err error) *session.Session
 	NewSessionWithOptions(opts session.Options) (*session.Session, error)
 }
