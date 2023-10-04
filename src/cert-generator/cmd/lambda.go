@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/zLukas/CloudTools/src/cert-generator/pkg/aws"
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/tls"
 )
 
@@ -23,7 +24,23 @@ func handleRequest(ctx context.Context, event RequestEvent) (string, error) {
 	if err != nil {
 		return "fail", fmt.Errorf("Failed to create Cert: %s", err.Error())
 	}
-	fmt.Printf("%v,%v", ceKey, ce)
+	//dbTable := os.Getenv("TABLE_NAME")
+	dbTable := "CertTable"
+	db := aws.Database{}
+	err = db.PutItem(aws.TableRecord{
+		CaCert: aws.CertItem{PrivateKey: string(caKey),
+			Cert: string(ca),
+		},
+		CeCert: aws.CertItem{PrivateKey: string(ceKey),
+			Cert: string(ce),
+		},
+		Name:         "sample-record",
+		CreationDate: "today",
+	},
+		aws.WithDynamoDBLogin(),
+		aws.WithTableName(dbTable),
+	)
+
 	return "sucess", nil
 
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/zLukas/CloudTools/src/cert-generator/pkg/aws"
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/input"
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/tls"
 )
@@ -36,4 +37,22 @@ func RunLocal() {
 	}
 
 	tls.WriteKeyCertFile(caKey, ca, "CA-Certificate.pem")
+
+	fmt.Print("uploading to database...")
+	dbTable := "Certificates"
+	db := aws.Database{}
+	err = db.PutItem(aws.TableRecord{
+		CaCert: aws.CertItem{PrivateKey: string(caKey),
+			Cert: string(ca),
+		},
+		CeCert:       aws.CertItem{},
+		Name:         "sample-record",
+		CreationDate: "today",
+	},
+		aws.WithDynamoDBLogin(),
+		aws.WithTableName(dbTable),
+	)
+	if err != nil {
+		fmt.Printf("database upload error: %s", err.Error())
+	}
 }
