@@ -37,9 +37,6 @@ func dynamoDBPutItem(client *dynamodb.Client, item TableRecord, table string) er
 		return fmt.Errorf("table error: %s", err.Error())
 	}
 
-	if err != nil {
-		panic(err)
-	}
 	dbItem, err := attributevalue.MarshalMap(item)
 
 	if err != nil {

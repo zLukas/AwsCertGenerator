@@ -1,0 +1,27 @@
+{
+  "caCert": {
+    "serial": 1,
+    "validForYears": 10,
+    "subject": {
+      "country": "PL",
+      "organization": "ChmurPol",
+      "organizationalUnit": "dzial certow",
+      "locality": "WD",
+      "commonName": "certhost jp2"
+    }
+  },
+  "cert": {
+      "serial": 1,
+      "validForYears": 1,
+      "dnsNames": [
+        "yellowhost.jp2"
+      ],
+      "subject": {
+        "country": "PL",
+        "organization": "ChmurPol",
+        "organizationalUnit": "dzial certow",
+        "locality": "WD",
+        "commonName": "creampie.jp2"
+      }
+  }
+}
