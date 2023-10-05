@@ -38,12 +38,13 @@ func RunLocal() {
 
 	tls.WriteKeyCertFile(caKey, ca, "CA-Certificate.pem")
 
-	fmt.Print("uploading to database...")
+	fmt.Print("uploading to database...\n")
 	dbTable := "Certificates"
 	db := aws.Database{}
 	err = db.PutItem(aws.TableRecord{
-		CaCert: aws.CertItem{PrivateKey: string(caKey),
-			Cert: string(ca),
+		CaCert: aws.CertItem{
+			PrivateKey: caKey,
+			Cert:       ca,
 		},
 		CeCert:       aws.CertItem{},
 		Name:         "sample-record",

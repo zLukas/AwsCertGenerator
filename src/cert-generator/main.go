@@ -10,10 +10,9 @@ import (
 func main() {
 	enviroment := os.Getenv("ENVIROMENT")
 	if enviroment == "LAMBDA" {
-
 		cmd.RunLambda()
 	} else {
-		fmt.Print("running locally")
+		fmt.Print("running locally\n")
 		cmd.RunLocal()
 	}
 }

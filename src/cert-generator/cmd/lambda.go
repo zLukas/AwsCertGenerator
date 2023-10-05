@@ -28,11 +28,11 @@ func handleRequest(ctx context.Context, event RequestEvent) (string, error) {
 	dbTable := "CertTable"
 	db := aws.Database{}
 	err = db.PutItem(aws.TableRecord{
-		CaCert: aws.CertItem{PrivateKey: string(caKey),
-			Cert: string(ca),
+		CaCert: aws.CertItem{PrivateKey: caKey,
+			Cert: ca,
 		},
-		CeCert: aws.CertItem{PrivateKey: string(ceKey),
-			Cert: string(ce),
+		CeCert: aws.CertItem{PrivateKey: ceKey,
+			Cert: ce,
 		},
 		Name:         "sample-record",
 		CreationDate: "today",
