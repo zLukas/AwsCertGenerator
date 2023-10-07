@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -8,8 +8,7 @@ import (
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/tls"
 )
 
-func main() {
-
+func RunLocal() {
 	var file string = ""
 	if len(os.Args) > 1 {
 		file = os.Args[1]
@@ -18,7 +17,7 @@ func main() {
 	config := input.Config{CfgFilePath: file}
 
 	if err := config.ParseInput(); err != nil {
-		fmt.Printf("cannot parse input file: %s", err)
+		fmt.Printf("cannot parse input file: %s", err.Error())
 		return
 	}
 
@@ -27,14 +26,6 @@ func main() {
 		fmt.Printf("Error: %s", err)
 	}
 
-	for k, el := range config.Cfg.Cert {
-
-		ceKey, ce, err := tls.CreateCertBytes(el, caKey, ca)
-		if err != nil {
-			fmt.Printf("Error: %s", err)
-		}
-		tls.WriteKeyCertFile(ceKey, ce, k+".pem")
-	}
-
 	tls.WriteKeyCertFile(caKey, ca, "CA-Certificate.pem")
+
 }

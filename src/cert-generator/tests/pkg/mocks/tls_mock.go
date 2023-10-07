@@ -1,4 +1,4 @@
-package tests
+package mocks
 
 import (
 	"crypto/rsa"
@@ -10,12 +10,12 @@ import (
 
 var testError error = fmt.Errorf("FAIL")
 
-type x509Mock struct {
+type X509Mock struct {
 	createcertificatesPass bool
 	parseCertificatePass   bool
 }
 
-func (x *x509Mock) CreateCertificate(rand io.Reader, template *x509.Certificate, parent *x509.Certificate, pub any, priv any) ([]byte, error) {
+func (x *X509Mock) CreateCertificate(rand io.Reader, template *x509.Certificate, parent *x509.Certificate, pub any, priv any) ([]byte, error) {
 	if x.createcertificatesPass {
 		return []byte{0xDE, 0xAD, 0xBE, 0xEF}, nil
 	} else {
@@ -23,7 +23,7 @@ func (x *x509Mock) CreateCertificate(rand io.Reader, template *x509.Certificate,
 	}
 }
 
-func (x *x509Mock) ParseCertificate(der []byte) (*x509.Certificate, error) {
+func (x *X509Mock) ParseCertificate(der []byte) (*x509.Certificate, error) {
 	if x.parseCertificatePass {
 		return &x509.Certificate{}, nil
 	} else {
@@ -31,7 +31,7 @@ func (x *x509Mock) ParseCertificate(der []byte) (*x509.Certificate, error) {
 	}
 }
 
-type pemMock struct {
+type PemMock struct {
 	encodePass bool
 	decodePass bool
 }
