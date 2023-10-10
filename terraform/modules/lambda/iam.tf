@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "lambda_policy_doc" {
     effect = "Allow"
     actions = var.lambda_iam_actions
 
-    resources = [var.lambda_iam_resource]
+    resources = var.lambda_iam_resources
   }
 }
 

@@ -22,8 +22,8 @@ variable lambda_iam_actions {
     type = list(string)
 }
 
-variable lambda_iam_resource {
-    type = string
+variable lambda_iam_resources {
+    type = list(string)
 }
 
 variable zip_file {
