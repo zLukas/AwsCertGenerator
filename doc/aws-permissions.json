@@ -1,0 +1,53 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "iamPolicy",
+            "Effect": "Allow",
+            "Action": [
+                "iam:DeletePolicy",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:CreatePolicy",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersions",
+                "iam:ListPolicyVersions",
+                "iam:DeleteRolePolicy",
+                "iam:CreateRole",
+                "iam:GetRole",
+                "iam:DeleteRole",
+                "iam:ListRolePolicies",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListInstanceProfilesForRole",
+                "iam:PassRole"
+
+            ],
+            "Resource": [
+                "arn:aws:iam::<account number>:role/*",
+                "arn:aws:iam::<account number>:policy/*"
+            ]
+        },
+        {
+            "Sid": "lambdaPermission",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:ListFunctions",
+                "lambda:ListEventSourceMappings",
+                "lambda:DeleteFunction",
+                "lambda:GetPolicy",
+                "lambda:InvokeAsync",
+                "lambda:GetFunctionConfiguration",
+                "lambda:CreateFunction",
+                "lambda:InvokeFunction",
+                "lambda:GetEventSourceMapping",
+                "lambda:GetFunction",
+                "lambda:ListVersionsByFunction",
+                "lambda:GetFunctionCodeSigningConfig"
+            ],
+            "Resource": [
+                "arn:aws:lambda:*:<account number>:event-source-mapping:*",
+                "arn:aws:lambda:*:<account number>:function:*"
+            ]
+        }
+    ]
+}
