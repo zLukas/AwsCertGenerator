@@ -15,16 +15,18 @@ variable lambda_name {
 }
 
 variable env_vars {
-    type = list(object({
-        name = string 
-        value = string
-    }))
+    type = map(string)
 }
 
 variable lambda_iam_actions {
     type = list(string)
 }
 
-variable lambda_iam_resources {
-    type = list(string)
+variable lambda_iam_resource {
+    type = string
 }
+
+variable zip_file {
+  type = string 
+}
+
