@@ -10,7 +10,7 @@
                 "iam:PutRolePolicy",
                 "iam:CreatePolicy",
                 "iam:GetPolicy",
-                "iam:GetPolicyVersions",
+                "iam:GetPolicyVersion",
                 "iam:ListPolicyVersions",
                 "iam:DeleteRolePolicy",
                 "iam:CreateRole",
@@ -20,15 +20,14 @@
                 "iam:ListAttachedRolePolicies",
                 "iam:ListInstanceProfilesForRole",
                 "iam:PassRole"
-
             ],
             "Resource": [
-                "arn:aws:iam::<account number>:role/*",
-                "arn:aws:iam::<account number>:policy/*"
+                "arn:aws:iam::<accountNumber>:role/*",
+                "arn:aws:iam::<accountNumber>:policy/*"
             ]
         },
         {
-            "Sid": "lambdaPermission",
+            "Sid": "lambdaPolicy",
             "Effect": "Allow",
             "Action": [
                 "lambda:ListFunctions",
@@ -42,11 +41,29 @@
                 "lambda:GetEventSourceMapping",
                 "lambda:GetFunction",
                 "lambda:ListVersionsByFunction",
-                "lambda:GetFunctionCodeSigningConfig"
+                "lambda:GetFunctionCodeSigningConfig",
+                "lambda:UpdateFunctionConfiguration"
             ],
             "Resource": [
-                "arn:aws:lambda:*:<account number>:event-source-mapping:*",
-                "arn:aws:lambda:*:<account number>:function:*"
+                "arn:aws:lambda:*:<accountNumber>:event-source-mapping:*",
+                "arn:aws:lambda:*:<accountNumber>:function:*"
+            ]
+        },
+        {
+            "Sid": "dynamoDbPolicy",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:CreateTable",
+                "dynamodb:DeleteTable",
+                "dynamodb:ListTables",
+                "dynamodb:DescribeTable",
+                "dynamodb:DescribeContinuousBackups",
+                "dynamodb:DescribeTimeToLive",
+                "dynamodb:ListTagsOfResource",
+                "dynamodb:TagResource"
+            ],
+            "Resource": [
+                "arn:aws:dynamodb:*:<accountNumber>:table/*"
             ]
         }
     ]

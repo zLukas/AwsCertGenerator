@@ -1,4 +1,4 @@
-resource "aws_lambda_function" "test_lambda" {
+resource "aws_lambda_function" "lambda" {
    
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
