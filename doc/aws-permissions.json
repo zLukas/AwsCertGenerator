@@ -7,19 +7,23 @@
             "Action": [
                 "iam:DeletePolicy",
                 "iam:AttachRolePolicy",
+                "iam:DetachRolePolicy",
                 "iam:PutRolePolicy",
                 "iam:CreatePolicy",
                 "iam:GetPolicy",
                 "iam:GetPolicyVersion",
                 "iam:ListPolicyVersions",
                 "iam:DeleteRolePolicy",
+                "iam:ListEntitiesForPolicy",
                 "iam:CreateRole",
                 "iam:GetRole",
                 "iam:DeleteRole",
                 "iam:ListRolePolicies",
                 "iam:ListAttachedRolePolicies",
                 "iam:ListInstanceProfilesForRole",
-                "iam:PassRole"
+                "iam:PassRole",
+                "iam:ListAttachedGroupPolicies",
+                "iam:UpdateRole"
             ],
             "Resource": [
                 "arn:aws:iam::<accountNumber>:role/*",

@@ -31,3 +31,9 @@ resource "aws_iam_policy" "lambda_permissions" {
   description = "IAM policy for Lambda"
   policy      = data.aws_iam_policy_document.lambda_policy_doc.json
 }
+
+resource "aws_iam_policy_attachment" "lambda_attachment" {
+  name       = "lambdaAttachment"
+  roles      = [aws_iam_role.iam_for_lambda.name] 
+  policy_arn = aws_iam_policy.lambda_permissions.arn
+}
