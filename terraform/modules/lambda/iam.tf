@@ -34,6 +34,6 @@ resource "aws_iam_policy" "lambda_permissions" {
 
 resource "aws_iam_policy_attachment" "lambda_attachment" {
   name       = "lambdaAttachment"
-  roles      =[aws_iam_role.iam_for_lambda.name] 
+  roles      = [aws_iam_role.iam_for_lambda.name] 
   policy_arn = aws_iam_policy.lambda_permissions.arn
 }
