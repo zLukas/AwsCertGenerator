@@ -1,6 +1,6 @@
 # AwsCertGenerator
 
-Generate tls certificates using Aws infrastructure
+Generate tls certificates using Aws infrastructure. golang cert-generator binary can be used in aws lambda runtime as well as runned locally.
 
 # AWS
 ## Prerequisities
