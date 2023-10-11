@@ -7,6 +7,8 @@ resource "aws_lambda_function" "lambda" {
   role          = aws_iam_role.iam_for_lambda.arn
   handler = "bootstrap"
   runtime = "go1.x"
+  timeout = var.timeout
+  memory_size = var.memory_size
 
 
   environment {

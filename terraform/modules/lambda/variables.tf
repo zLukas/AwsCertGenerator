@@ -10,6 +10,16 @@ variable region {
   type        = string
 }
 
+variable timeout {
+  type = number
+  default = 30
+}
+
+variable memory_size {
+  type = number
+  default = 512
+}
+
 variable lambda_name {
     type      = string 
 }
