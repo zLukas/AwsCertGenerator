@@ -10,15 +10,22 @@ variable region {
   type        = string
 }
 
+variable timeout {
+  type = number
+  default = 30
+}
+
+variable memory_size {
+  type = number
+  default = 512
+}
+
 variable lambda_name {
     type      = string 
 }
 
 variable env_vars {
-    type = list(object({
-        name = string 
-        value = string
-    }))
+    type = map(string)
 }
 
 variable lambda_iam_actions {
@@ -28,3 +35,8 @@ variable lambda_iam_actions {
 variable lambda_iam_resources {
     type = list(string)
 }
+
+variable zip_file {
+  type = string 
+}
+
