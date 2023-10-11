@@ -31,7 +31,7 @@ func handleRequest(ctx context.Context, event RequestEvent) (string, error) {
 	dbRegion := os.Getenv("DB_REGION")
 	db := aws.Database{}
 	if err != nil {
-		fmt.Printf("Error: %s", err)
+		return "fail", fmt.Errorf("Error: %s", err)
 	}
 	currentTime := time.Now()
 
@@ -51,7 +51,7 @@ func handleRequest(ctx context.Context, event RequestEvent) (string, error) {
 		aws.WithTableName(dbTable),
 	)
 	if err != nil {
-		fmt.Printf("database upload error: %s", err.Error())
+		return "fail", fmt.Errorf("database upload error: %s", err.Error())
 	}
 
 	return "sucess", nil
