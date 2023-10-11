@@ -2,7 +2,7 @@
 
 Generate tls certificates using Aws infrastructure
 
-# AWS
+# AWS infrasructure
 ## Prerequisities
 In order to create AWS infrastructure, use following policy: [aws-permission.json](doc/aws-permissions.json)  
 ## steps
@@ -12,3 +12,4 @@ In order to create AWS infrastructure, use following policy: [aws-permission.jso
 3. place .zip file in `/terraform` dir.  
 4. customise terraform variables if needed.
 5. run terraform apply command.
+
