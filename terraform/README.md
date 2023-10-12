@@ -1,5 +1,7 @@
 # AWS infrastructure
 
+<img width="871" alt="aws infra" src="https://github.com/zLukas/AwsCertGenerator/doc/aws_infra.png">
+
 ## directory structure
 * modules
   * dynamodb - aws dynamodb table generic module
