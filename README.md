@@ -1,6 +1,6 @@
 # AwsCertGenerator
 
-Generate tls certificates using Aws infrastructure
+Cert Generator is a hobby project that aim to automate TLS self signed certificates. Cert generator can be used locally as standalone binary, as well as aws deployment.
 
 # AWS infrasructure
 ## Prerequisities
