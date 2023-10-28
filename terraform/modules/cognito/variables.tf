@@ -12,15 +12,19 @@ variable region {
 
  variable policy {
   type = object({
+    name = string
     actions = list(string)
-    resource = list(string)
+    resources = list(string)
   })
  }
 
-variable policy_name {
-    type       =  string
-}
-
 variable pool {
     type        = string
+}
+
+variable user {
+  type = object({
+    name = string
+    email = string
+  })
 }
