@@ -1,3 +1,5 @@
+# general settings
+
 variable access_key {
   type        = string
   sensitive   = true
@@ -13,6 +15,9 @@ variable region {
   default = "eu-central-1"
 }
 
+
+
+# DynamoDB module settings
 variable table_name {
     type = string 
     default = "certificates"
@@ -29,9 +34,10 @@ variable table_main_key {
 }
 }
 
+# Lambda module settings
 variable lambda_name {
     type      = string 
-    default = "CertLambda"
+    default = "certGenerator"
 }
 
 variable env_vars {
@@ -56,3 +62,14 @@ variable zip_file {
   type = string
   default = "bootstrap.zip"
 }
+variable lambda_handler {
+  type = string
+}
+
+# users setings
+
+variable "admin_user" {
+  type = string
+  default = "defaultAdmin"
+}
+

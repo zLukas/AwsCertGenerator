@@ -40,3 +40,6 @@ variable zip_file {
   type = string 
 }
 
+variable handler {
+    type = string
+}

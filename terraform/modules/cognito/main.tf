@@ -8,8 +8,8 @@ resource "aws_cognito_user" "users" {
   username     = var.user.name
 
   desired_delivery_mediums =["EMAIL"]
-  enabled = false
-  message_action = "RESEND"
+  enabled = true
+  # message_action = "RESEND" / apply to already existing user
   temporary_password = "cognitO1$"
   attributes = {
     email = var.user.email

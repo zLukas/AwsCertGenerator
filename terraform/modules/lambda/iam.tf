@@ -20,7 +20,6 @@ data "aws_iam_policy_document" "lambda_policy_doc" {
   statement {
     effect = "Allow"
     actions = var.lambda_iam_actions
-
     resources = var.lambda_iam_resources
   }
 }
