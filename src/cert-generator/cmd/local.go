@@ -1,3 +1,5 @@
+//go:build !awslambda
+
 package cmd
 
 import (
@@ -8,7 +10,7 @@ import (
 	"github.com/zLukas/CloudTools/src/cert-generator/pkg/tls"
 )
 
-func RunLocal() {
+func Run() {
 	var file string = ""
 	if len(os.Args) > 1 {
 		file = os.Args[1]
