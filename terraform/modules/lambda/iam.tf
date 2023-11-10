@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "lambda_assume_role" {
 }
 
 resource "aws_iam_role" "iam_for_lambda" {
-  name               = "LambdaIam"
+  name               = "${var.lambda_name}LambdaIAM"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
@@ -26,14 +26,14 @@ data "aws_iam_policy_document" "lambda_policy_doc" {
 }
 
 resource "aws_iam_policy" "lambda_permissions" {
-  name        = "lambda_permissions"
+  name        = "lambda${var.lambda_name}permissions"
   path        = "/"
   description = "IAM policy for Lambda"
   policy      = data.aws_iam_policy_document.lambda_policy_doc.json
 }
 
 resource "aws_iam_policy_attachment" "lambda_attachment" {
-  name       = "lambdaAttachment"
+  name       = "${var.lambda_name}lambdaAttachment"
   roles      = [aws_iam_role.iam_for_lambda.name] 
   policy_arn = aws_iam_policy.lambda_permissions.arn
 }

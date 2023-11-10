@@ -5,8 +5,8 @@ resource "aws_lambda_function" "lambda" {
   filename      = var.zip_file
   function_name = var.lambda_name
   role          = aws_iam_role.iam_for_lambda.arn
-  handler = "bootstrap"
-  runtime = "go1.x"
+  handler = var.handler
+  runtime = var.runtime
   timeout = var.timeout
   memory_size = var.memory_size
 
