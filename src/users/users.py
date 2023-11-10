@@ -1,6 +1,15 @@
 import boto3 
 
 client = boto3.client('iam')
+IAM_EXCEPTIONS =(client.exceptions.LimitExceededException,
+                client.exceptions.NoSuchEntityException,
+                client.exceptions.DeleteConflictException,
+                client.exceptions.ConcurrentModificationException,
+                client.exceptions.ServiceFailureException,
+                client.exceptions.EntityAlreadyExistsException,
+                client.exceptions.InvalidInputException,)
+
+
 
 def list_users():
     response = client.list_users()
@@ -8,35 +17,29 @@ def list_users():
     return list(users)
 
 def delete_users(users: list):
-    delete_exceptions = (client.exceptions.LimitExceededException,
-                client.exceptions.NoSuchEntityException,
-                client.exceptions.DeleteConflictException,
-                client.exceptions.ConcurrentModificationException,
-                client.exceptions.ServiceFailureException,)
     return_val = None
-    for name in user:
+    response = None
+    for name in users:
         try: 
-            response = client.delete_user(UserName=user_name)
+            keys_meta = client.list_access_keys(UserName = name)
+            keys_ids = list(map(lambda k: k["AccessKeyId"], keys_ids["AccessKeyMetadata"]))
+            map(lambda id : client.delete_access_keys(UserName=name, AccessKeyId=id), keys_ids)
+            response = client.delete_user(UserName=name)
 
-            except delete_exceptions as e:
-                reponse = {"Error": e}
-            finally:
-                return_val[name] = response
+        except IAM_EXCEPTIONS as e:
+            reponse = {"Error": e}
+        finally:
+            return_val[name] = response
     return return_val
 
 def create_users(users: list):
-    create_exceptions = (client.exceptions.LimitExceededException,
-        client.exceptions.EntityAlreadyExistsException,
-        client.exceptions.NoSuchEntityException,
-        client.exceptions.InvalidInputException,
-        client.exceptions.ConcurrentModificationException,
-        client.exceptions.ServiceFailureException,)
     return_val = None 
+    key = None
     for name in users:
         try: 
             response = client.create_user(
                 Path='/certClient/',
-                UserName=user_name,
+                UserName=name,
                 Tags=[
                 {
                     'Key': 'Creator',
@@ -44,10 +47,13 @@ def create_users(users: list):
                 },
                 ]
             )
-        except create_exceptions as e:
+            key = client.create_access_key(UserName=name)
+        except IAM_EXCEPTIONS as e:
             reponse = {"Error": e}
+            key = None
         finally:
-            return_val[name] = response
+            return_val[name] = {"user": response,
+                                "key": key}
     return return_val
 
 RUN = {
@@ -56,6 +62,6 @@ RUN = {
     "list": list_users
 }
 
-def handler_name(event, context): 
+def handler(event, context): 
     option = event["option"]
     RUN[option](event["args"])
