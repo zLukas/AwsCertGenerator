@@ -1,5 +1,4 @@
 import boto3 
-
 client = boto3.client('iam')
 IAM_EXCEPTIONS =(client.exceptions.LimitExceededException,
                 client.exceptions.NoSuchEntityException,
@@ -11,19 +10,23 @@ IAM_EXCEPTIONS =(client.exceptions.LimitExceededException,
 
 
 
-def list_users():
-    response = client.list_users()
-    users = map(lambda u: (u["UserName"], u["Path"]), response["Users"])
-    return list(users)
+def list_users(*args):
+    response = client.list_users() 
+    users = list(map(lambda u: (u["UserName"], u["Path"]), response["Users"]))
+    users = list(filter(lambda u: "cert" in  u[1], users))
+    return users
 
 def delete_users(users: list):
-    return_val = None
-    response = None
+    return_val = {}
+    response = {}
     for name in users:
         try: 
             keys_meta = client.list_access_keys(UserName = name)
-            keys_ids = list(map(lambda k: k["AccessKeyId"], keys_ids["AccessKeyMetadata"]))
-            map(lambda id : client.delete_access_keys(UserName=name, AccessKeyId=id), keys_ids)
+            keys_ids = list(map(lambda k: k["AccessKeyId"], keys_meta["AccessKeyMetadata"]))
+            for key in keys_ids:
+                client.delete_access_key(
+                    UserName=name, 
+                    AccessKeyId=key)
             response = client.delete_user(UserName=name)
 
         except IAM_EXCEPTIONS as e:
@@ -33,8 +36,9 @@ def delete_users(users: list):
     return return_val
 
 def create_users(users: list):
-    return_val = None 
-    key = None
+    return_val = {} 
+    key = {}
+    response = {}
     for name in users:
         try: 
             response = client.create_user(
@@ -49,8 +53,8 @@ def create_users(users: list):
             )
             key = client.create_access_key(UserName=name)
         except IAM_EXCEPTIONS as e:
-            reponse = {"Error": e}
-            key = None
+            response= {"Error": e}
+
         finally:
             return_val[name] = {"user": response,
                                 "key": key}
@@ -62,6 +66,6 @@ RUN = {
     "list": list_users
 }
 
-def handler(event, context): 
+def lambda_handler(event, context): 
     option = event["option"]
-    RUN[option](event["args"])
+    print(RUN[option](event["args"]))
