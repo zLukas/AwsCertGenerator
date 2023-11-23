@@ -2,6 +2,10 @@ output "dynamodbTable"{
     value = module.certTable.arn
 }
 
-output "Lambda_url"{
-    value = aws_lambda_function_url.certLambda_latest.function_url
+output "CertLambda_url"{
+    value = aws_lambda_function_url.certLambda.function_url
+}
+
+output "UserLambda_url"{
+    value = aws_lambda_function_url.userLambda.function_url
 }

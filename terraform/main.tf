@@ -1,7 +1,8 @@
 data "aws_caller_identity" "current" {}
 locals {
     account_id = data.aws_caller_identity.current.account_id
-	lambda_name = "CertGen"
+	cert_lambda_name = "CertGen"
+    user_lambda_name = "Users"
 	table_name = "certificates"
 }
 
@@ -23,7 +24,7 @@ module certLambda {
     access_key = var.access_key
     secret_key = var.secret_key
     region = var.region
-    lambda_name = local.lambda_name
+    lambda_name = local.cert_lambda_name
     zip_file = "certgen.zip"
     handler = "bootstrap"
     runtime = "go1.x"
@@ -39,7 +40,67 @@ module certLambda {
 				          "dynamodb:UpdateItem"]
 
 }
-resource "aws_lambda_function_url" "certLambda_latest" {
-  function_name      = local.lambda_name
+resource "aws_lambda_function_url" "certLambda" {
+  function_name      = local.cert_lambda_name
   authorization_type = "AWS_IAM"
+  depends_on = [
+    module.certLambda
+  ]
+}
+
+
+module userLambda {
+    source = "./modules/lambda"
+    access_key = var.access_key
+    secret_key = var.secret_key
+    region = var.region
+    lambda_name = local.user_lambda_name
+    zip_file = "users.zip"
+    handler = "lambda_handler"
+    runtime = "python3.11"
+    lambda_iam_resources = [
+				"arn:aws:iam::${local.account_id}:role/*",
+				"arn:aws:iam::${local.account_id}:group/*",
+				"arn:aws:iam::${local.account_id}:policy/*",
+				"arn:aws:iam::${local.account_id}:user/*"]
+
+    lambda_iam_actions = [
+				"iam:GetPolicyVersion",
+				"iam:DeleteGroup",
+				"iam:DeletePolicy",
+				"iam:CreateRole",
+				"iam:PutRolePolicy",
+				"iam:CreateUser",
+				"iam:CreateAccessKey",
+				"iam:CreateLoginProfile",
+				"iam:AddUserToGroup",
+				"iam:RemoveUserFromGroup",
+				"iam:ListPolicyTags",
+				"iam:ListRolePolicies",
+				"iam:ChangePassword",
+				"iam:ListAccessKeys",
+				"iam:GetRole",
+				"iam:CreateGroup",
+				"iam:GetPolicy",
+				"iam:UpdateUser",
+				"iam:DeleteRole",
+				"iam:UpdateAccessKey",
+				"iam:DeleteUser",
+				"iam:ListUserPolicies",
+				"iam:CreatePolicy",
+				"iam:GetUserPolicy",
+				"iam:PutUserPolicy",
+				"iam:UpdateRole",
+				"iam:GetUser",
+				"iam:GetRolePolicy",
+				"iam:ListUserTags"
+			]
+}
+
+resource "aws_lambda_function_url" "userLambda" {
+  function_name      = local.user_lambda_name
+  authorization_type = "AWS_IAM"
+  depends_on = [
+    module.userLambda
+  ]
 }
