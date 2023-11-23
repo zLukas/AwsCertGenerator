@@ -6,7 +6,7 @@ resource "aws_lambda_function" "lambda" {
   function_name = var.lambda_name
   role          = aws_iam_role.iam_for_lambda.arn
   handler = var.handler
-  runtime = "go1.x"
+  runtime = var.runtime
   timeout = var.timeout
   memory_size = var.memory_size
 

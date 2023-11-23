@@ -15,6 +15,17 @@ variable timeout {
   default = 30
 }
 
+
+variable handler {
+  type = string
+  default = 30
+}
+
+variable runtime {
+  type = string
+  default = 30
+}
+
 variable memory_size {
   type = number
   default = 512
@@ -26,6 +37,9 @@ variable lambda_name {
 
 variable env_vars {
     type = map(string)
+    default = {
+      ENVIROMENT = "LAMBDA"
+    }
 }
 
 variable lambda_iam_actions {

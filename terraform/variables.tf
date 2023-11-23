@@ -15,7 +15,9 @@ variable region {
   default = "eu-central-1"
 }
 
-
+variable clients {
+  type = list(string)
+}
 
 # DynamoDB module settings
 variable table_name {
@@ -31,45 +33,6 @@ variable table_main_key {
     default = {
         name = "Name"
         type = "S"
-}
-}
-
-# Lambda module settings
-variable lambda_name {
-    type      = string 
-    default = "certGenerator"
-}
-
-variable env_vars {
-    type = map(string)
-    default = {
-		    ENVIROMENT = "LAMBDA"
-		    TABLE_NAME = "certificates"
-        DB_REGION = "eu-central-1"
     }
-}
-
-variable lambda_iam_actions {
-    type = list(string)
-    default = ["dynamodb:TagResource",
-				        "dynamodb:PutItem",
-				        "dynamodb:DescribeTable",
-				        "dynamodb:DeleteItem",
-				        "dynamodb:UpdateItem"]
-}
-
-variable zip_file {
-  type = string
-  default = "bootstrap.zip"
-}
-variable lambda_handler {
-  type = string
-}
-
-# users setings
-
-variable "admin_user" {
-  type = string
-  default = "defaultAdmin"
 }
 
