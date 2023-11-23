@@ -4,7 +4,7 @@ Cert Generator is a hobby project that aim to automate TLS self signed certifica
 
 # AWS infrasructure
 aws infrastructure is handled mainly by terrafrom:  
-![infrastructure](doc/infrastructure.png "overal infrastructure")
+![infrastructure](doc/infrastructure-v01.png "overal infrastructure")
 
 ## Prerequisities
 In order to create AWS infrastructure, use following policy: [aws-permission.json](doc/aws-permissions.json)  
