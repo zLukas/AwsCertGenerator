@@ -104,3 +104,14 @@ resource "aws_lambda_function_url" "userLambda" {
     module.userLambda
   ]
 }
+
+module "client_iam-group-with-policies" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
+  version = "5.30.0"
+  name = "certClient"
+  path = "/CertClient/"
+    custom_group_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+    ]
+}
+

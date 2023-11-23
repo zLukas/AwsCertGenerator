@@ -1,3 +1,5 @@
+//go:build awslambda
+
 package cmd
 
 import (
@@ -58,6 +60,6 @@ func handleRequest(ctx context.Context, event RequestEvent) (string, error) {
 
 }
 
-func RunLambda() {
+func Run() {
 	lambda.Start(handleRequest)
 }
