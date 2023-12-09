@@ -53,7 +53,3 @@ variable lambda_iam_resources {
 variable zip_file {
   type = string 
 }
-
-variable handler {
-    type = string
-}
