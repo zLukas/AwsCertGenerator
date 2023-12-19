@@ -61,8 +61,7 @@ resource "aws_iam_access_key" "clents_acces_keys" {
 
 
 resource "aws_iam_policy_attachment" "ClientsPolicy" {
-  for_each=aws_iam_user.client_users
   name="clients-db-policy"
-  users=[each.value.name]
+  users=var.clients
   policy_arn="arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
 }
