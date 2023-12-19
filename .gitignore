@@ -168,7 +168,7 @@ cython_debug/
 
 
 #terrafrom
-*.tfvars
+*.tfvars*
 .terraform*
 *.tfstate*
 
