@@ -1,9 +1,9 @@
 data "aws_caller_identity" "current" {}
 locals {
     account_id = data.aws_caller_identity.current.account_id
-	cert_lambda_name = "CertGen"
+	  cert_lambda_name = "CertGen"
     user_lambda_name = "Users"
-	table_name = "certificates"
+	  table_name = "certificates"
 }
 
 module certTable {
@@ -40,6 +40,22 @@ module certLambda {
 				          "dynamodb:UpdateItem"]
 
 }
+
+
+module userLambda {
+    source = "./modules/lambda"
+    access_key = var.access_key
+    secret_key = var.secret_key
+    region = var.region
+    lambda_name = local.user_lambda_name
+    zip_file = "users.zip"
+    handler = "lambda_handler"
+    runtime = "python3.11"
+    lambda_iam_resources = ["arn:aws:cognito::${local.account_id}:*"]
+    lambda_iam_actions = ["cognito:addUser"]
+
+}
+
 resource "aws_lambda_function_url" "certLambda" {
   function_name      = local.cert_lambda_name
   authorization_type = "AWS_IAM"
@@ -48,20 +64,23 @@ resource "aws_lambda_function_url" "certLambda" {
   ]
 }
 
-resource "aws_iam_user" "client_users" {
-  for_each = toset(var.clients)
-  name = each.value
-  path = "/certClient/"
+resource "aws_lambda_function_url" "userLambda" {
+  function_name      = local.user_lambda_name
+  authorization_type = "AWS_IAM"
+  depends_on = [
+    module.userLambda
+  ]
 }
 
-resource "aws_iam_access_key" "clents_acces_keys" {
-  for_each = aws_iam_user.client_users
-  user = each.value.name
-}
-
-
-resource "aws_iam_policy_attachment" "ClientsPolicy" {
-  name="clients-db-policy"
-  users=var.clients
-  policy_arn="arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+module "cognito"{
+  source = "./modules/cognito"
+  pool_name = "CertUsers"
+  access_key = var.access_key
+  secret_key = var.secret_key
+  region = var.region
+  policy = {
+        name = "CertGenUsers"
+        actions = ["dynamodb:DescribeTable"]
+        resources = [module.certTable.arn]
+  }
 }

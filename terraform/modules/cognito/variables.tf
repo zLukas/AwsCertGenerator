@@ -18,13 +18,6 @@ variable region {
   })
  }
 
-variable pool {
+variable pool_name {
     type        = string
-}
-
-variable user {
-  type = object({
-    name = string
-    email = string
-  })
 }

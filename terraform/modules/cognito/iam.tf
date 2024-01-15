@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "policy_doc" {
 }
 resource "aws_iam_policy" "cognito_policy" {
   name        = var.policy.name
-  path        = "/cognito/${var.pool}/"
+  path        = "/cognito/${var.pool_name}/"
   description = "Cognito user policy"
 
   policy = data.aws_iam_policy_document.policy_doc.json
@@ -29,7 +29,7 @@ resource "aws_iam_policy" "cognito_policy" {
 
 resource "aws_iam_role" "cognito_role"{
 
-    name = "Cognito${var.pool}UserRoles"
+    name = "Cognito${var.pool_name}UserRoles"
     assume_role_policy = data.aws_iam_policy_document.cognito_assume_role.json
 }
 
