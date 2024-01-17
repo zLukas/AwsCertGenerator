@@ -79,7 +79,7 @@ module "cognito"{
   secret_key = var.secret_key
   region = var.region
   policy = {
-        name = "CertGenUsers"
+        name = "CertUsers"
         actions = ["dynamodb:DescribeTable"]
         resources = [module.certTable.arn]
   }
