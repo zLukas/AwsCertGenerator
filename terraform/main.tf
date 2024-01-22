@@ -3,6 +3,7 @@ locals {
     account_id = data.aws_caller_identity.current.account_id
 	  cert_lambda_name = "CertGen"
     user_lambda_name = "Users"
+    client_lambda_name= "Clients"
 	  table_name = "certificates"
 }
 
@@ -41,7 +42,6 @@ module certLambda {
 
 }
 
-
 module userLambda {
     source = "./modules/lambda"
     access_key = var.access_key
@@ -56,6 +56,22 @@ module userLambda {
 
 }
 
+module clientLambda {
+    source = "./modules/lambda"
+    access_key = var.access_key
+    secret_key = var.secret_key
+    region = var.region
+    lambda_name = local.client_lambda_name
+    zip_file = "client.zip"
+    handler = "lambda_handler"
+    runtime = "python3.11"
+    lambda_iam_resources = [module.certTable.arn]
+    lambda_iam_actions = ["dynamodb:GetItem"]
+
+}
+
+
+
 resource "aws_lambda_function_url" "certLambda" {
   function_name      = local.cert_lambda_name
   authorization_type = "AWS_IAM"
@@ -69,6 +85,14 @@ resource "aws_lambda_function_url" "userLambda" {
   authorization_type = "AWS_IAM"
   depends_on = [
     module.userLambda
+  ]
+}
+
+resource "aws_lambda_function_url" "clientLambda" {
+  function_name      = local.client_lambda_name
+  authorization_type = "AWS_IAM"
+  depends_on = [
+    module.clientLambda
   ]
 }
 
