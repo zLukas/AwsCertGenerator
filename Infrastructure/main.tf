@@ -1,4 +1,5 @@
 data "aws_caller_identity" "current" {}
+
 locals {
     account_id = data.aws_caller_identity.current.account_id
 	  cert_lambda_name = "CertGen"
@@ -8,7 +9,7 @@ locals {
 }
 
 module certTable {
-    source ="./modules/dynamodb"
+    source ="./IaaS/aws/dynamodb"
     access_key = var.access_key
     secret_key = var.secret_key
     region = var.region
@@ -21,7 +22,7 @@ module certTable {
 }
 
 module certLambda {
-    source = "./modules/lambda"
+    source = "./IaaS/aws/lambda"
     access_key = var.access_key
     secret_key = var.secret_key
     region = var.region
@@ -43,7 +44,7 @@ module certLambda {
 }
 
 module userLambda {
-    source = "./modules/lambda"
+    source = "./IaaS/aws/lambda"
     access_key = var.access_key
     secret_key = var.secret_key
     region = var.region
@@ -57,7 +58,7 @@ module userLambda {
 }
 
 module clientLambda {
-    source = "./modules/lambda"
+    source = "./IaaS/aws/lambda"
     access_key = var.access_key
     secret_key = var.secret_key
     region = var.region
@@ -97,7 +98,7 @@ resource "aws_lambda_function_url" "clientLambda" {
 }
 
 module "cognito"{
-  source = "./modules/cognito"
+  source = "./IaaS/aws/cognito"
   pool_name = "CertUsers"
   access_key = var.access_key
   secret_key = var.secret_key
